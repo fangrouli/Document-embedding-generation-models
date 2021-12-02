@@ -1,6 +1,6 @@
 # Document-embedding-generation-models
 
-
+  
 ## **Introduction**
 
 This is a repository for a project: Development and Application of Document Embedding for Semantic Text Retrieval
@@ -22,21 +22,21 @@ The documents will be broken into sentences, which will be tokenized and encoded
 
 The similarity score calculation we used is cosine similarity, and model evaluation metric is AUROC.
 
-
+  
 ## **Step To Run Source Codes**
 1. Run DataPrep.py, enter the file directories of the original .tsv files of the train and test ultrabalanced PatentMatch dataset.
 2. Run TokGen.py, clearing of data and convert them to index tokens.
 3. Run ValidationSet.py, generate validation dataset from the training dataset.
 4. Run Baseline.py, evaluate the dataset and create the score.pt to keep logging model performance.
 5. Run any model from CNN.py, Transformer.py etc. according to need.
-
+  
 ### **Extra Files**
-parameters.py: Configuration files, as well as some universally used functions.
-ModelScore.py: The function for AUC score generation for model evaluation.
+parameters.py: Configuration files, as well as some universally used functions.  
+ModelScore.py: The function for AUC score generation for model evaluation.  
 
 (TBC)
 
-
+  
 ## **Reference**
 1. SBERT Sentence Encoder (https://www.sbert.net/): Reimers & Gurevych, 2019, *Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks*, arXiv e-prints, URL: https://arxiv.org/abs/1908.10084 ;
 2. TextCNN: Kim, 2014, *Convolutional Neural Networks for Sentence Classification*, arXiv e-prints, URL:https://arxiv.org/abs/1408.5882 ;
