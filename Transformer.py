@@ -13,6 +13,7 @@ import torch
 from torch import nn, Tensor
 from torch.nn import TransformerEncoder, TransformerEncoderLayer
 
+#Reference: https://pytorch.org/tutorials/beginner/transformer_tutorial.html
 class TransformerModel(nn.Module):
     def __init__(self, emb_size, max_n_sent, n_hidden, n_head, n_layers, dropout):
         super().__init__()
