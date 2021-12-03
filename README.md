@@ -43,5 +43,6 @@ ModelScore.py: The function for AUC score generation for model evaluation.
 3. Transformer: Vaswani *et al.*, 2017, *Attention is All You Need*, URL: https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf ;
 4. Poly-Encoder: Humeau *et al.*, 2019, *Poly-encoders: Transformer Architectures and Pre-training Strategies for Fast and Accurate Multi-sentence Scoring*, arXiv e-prints, URL: https://arxiv.org/abs/1905.01969 ;
 5. PatentMatch Dataset: Risch *et al.*, 2020, *PatentMatch: A Dataset for Matching Patent Claims & Prior Art*, arXiv e-prints, URL: https://arxiv.org/abs/2012.13919 ;
+6. References for the algorithms are cited in the corresponding python files as comments.
 
 
