@@ -28,7 +28,7 @@ The similarity score calculation we used is cosine similarity, and model evaluat
 2. Run TokGen.py, clearing of data and convert them to index tokens.
 3. Run ValidationSet.py, generate validation dataset from the training dataset.
 4. Run Baseline.py, evaluate the dataset and create the score.pt to keep logging model performance.
-5. Run any model from CNN.py, Transformer.py, Trans-Poly-Encoder.py according to need. (Note that trans-poly-encoder.py requires a pretrained transformer model).
+5. Run any model from CNN.py, Transformer.py, Trans-poly-encoder.py according to need. (Note that Trans-poly-encoder.py requires a pretrained transformer model).
   
 ### **Extra Files**
 parameters.py: Configuration files, as well as some universally used functions.  
