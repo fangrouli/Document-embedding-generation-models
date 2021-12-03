@@ -16,6 +16,8 @@ N_EPOCH = 20
 CNN_WINDOWS = [2, 3]
 CNN_LR = 0.0001
 TRANS_LR = 0.0001
+POLY_M = 16
+POLY_LR = 0.0001
 
 TEST_PARAM = {'batch_size':BATCH_SIZE, 'shuffle': False}
 TRAIN_PARAM = {'batch_size':BATCH_SIZE, 'shuffle': False}
