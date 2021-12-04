@@ -33,6 +33,7 @@ The similarity score calculation we used is cosine similarity, and model evaluat
 ### **Extra Files**
 parameters.py: Configuration files, as well as some universally used functions.  
 ModelScore.py: The function for AUC score generation for model evaluation. 
+DataGenerator.py: The class for data generator used to generate mini-batches and the customized collate function.
 
   
 ## **Reference**
