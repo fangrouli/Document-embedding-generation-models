@@ -17,7 +17,6 @@ from torch.nn import TransformerEncoder, TransformerEncoderLayer
 para_embs = {}
 result = [0, 0]
 
-#Reference: https://github.com/chijames/Poly-Encoder/blob/master/encoder.py
 class PolyEncoder(nn.Module):
     def __init__(self, poly_m, emb_size):
         super().__init__()
@@ -288,20 +287,20 @@ if __name__ == "__main__":
     
     elif option == '2':   #continue paused training
         checkpoint = torch.load(model_dir)
-        transformer.load_state_dict(checkpoint['model_state_dict'])
+        poly_encoder.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         history = torch.load(hist_dir)
         val_loss = checkpoint['validation_loss']
-        transformer.train()
+        poly_encoder.train()
         train(transformer, poly_encoder, encoder, optimizer, train_generator, 
               val_generator, history, model_dir, hist_dir, val_loss)
         plot_loss(history)
     
     else:    #evaluation
         checkpoint = torch.load(model_dir)
-        transformer.load_state_dict(checkpoint['model_state_dict'])
+        poly_encoder.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         val_loss = checkpoint['validation_loss']
 
-        transformer.eval()
+        poly_encoder.eval()
         eval(transformer, poly_encoder, encoder, test_generator)
