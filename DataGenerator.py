@@ -1,11 +1,4 @@
-import os
-import pandas as pd
-import numpy as np
-from tqdm import tqdm
 from matplotlib import pyplot as plt
-from sklearn.metrics.pairwise import cosine_similarity
-from transformers import AutoTokenizer
-from transformers import AutoModel
 import torch
 from parameters import TEST_PARAM, TRAIN_PARAM, VAL_PARAM
 

@@ -1,13 +1,7 @@
-import os
 import pandas as pd
-import numpy as np
-import math
 from tqdm import tqdm
 from matplotlib import pyplot as plt
-
-from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
-
 import torch
 
 pd.options.mode.chained_assignment = None

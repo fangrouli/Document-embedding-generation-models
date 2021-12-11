@@ -1,24 +1,15 @@
-'''
-The file is to construct a CNN model based on TextCNN, which has multiple convolutional blocks with different filter sizes   
-'''
-
 from DataGenerator import pad, generateData
 from parameters import DEVICE, SBERT_VERSION, MAX_SENT_LENGTH, MAX_PARA_LENGTH
 from parameters import MENU, SAVE_HISTORY, SAVE_MODEL, N_HIDDEN, CNN_WINDOWS, CNN_LR, EMB_SIZE, BATCH_SIZE, N_EPOCH
 from ModelScore import ProduceAUC, plot_loss
-import os
-import pandas as pd
 import numpy as np
-import math
 from tqdm import tqdm
-from matplotlib import pyplot as plt
 from transformers import AutoModel
 import torch
 import torch.nn as nn
 
 class CNNModel(nn.Module):
     def __init__(self, emb_size, max_n_sent, sent_length, n_hidden, windows):
-        #
         super(CNNModel, self).__init__()  
         self.emb_size = emb_size
         self.max_n_sent = max_n_sent

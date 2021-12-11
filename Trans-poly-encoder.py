@@ -3,17 +3,15 @@ from parameters import DEVICE, SBERT_VERSION, MAX_SENT_LENGTH, MAX_PARA_LENGTH, 
 from parameters import TRANS_DROPOUT, TRANS_LAYER, TRANS_LR, N_EPOCH, POLY_M, POLY_LR
 from parameters import MENU, SAVE_HISTORY, SAVE_MODEL, TRANS_N_HIDDEN, EMB_SIZE, BATCH_SIZE
 from ModelScore import ProduceAUC, plot_loss
-import os
-import pandas as pd
 import numpy as np
 import math
 from tqdm import tqdm
-from matplotlib import pyplot as plt
 from transformers import AutoModel
 import torch
 from torch import nn, Tensor
 import torch.nn.functional as F
 from torch.nn import TransformerEncoder, TransformerEncoderLayer
+
 para_embs = {}
 result = [0, 0]
 

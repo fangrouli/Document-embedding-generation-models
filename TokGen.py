@@ -1,12 +1,7 @@
-import os
-import csv
 import pandas as pd
 import numpy as np
-from tqdm import tqdm
-import regex as re
 from matplotlib import pyplot as plt
 from transformers import AutoTokenizer
-from transformers import AutoModel
 from parameters import SBERT_VERSION, MAX_SENT_LENGTH
 
 import torch

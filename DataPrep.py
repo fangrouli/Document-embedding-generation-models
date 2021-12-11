@@ -1,11 +1,7 @@
-import os
-import csv
 import pandas as pd
 pd.options.mode.chained_assignment = None  #ignore the warning
 from tqdm import tqdm
 import regex as re
-import torch
-import nltk
 
 def import_train_set(direc):
     with open(direc) as file:

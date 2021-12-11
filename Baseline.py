@@ -1,12 +1,9 @@
 from DataGenerator import Dataset, cust_collate, pad
 from parameters import DEVICE, TEST_PARAM, SBERT_VERSION, MAX_SENT_LENGTH, MAX_PARA_LENGTH, BATCH_SIZE, EMB_SIZE
 from ModelScore import ProduceAUC
-import os
 import pandas as pd
-import numpy as np
 from tqdm import tqdm
 from matplotlib import pyplot as plt
-from transformers import AutoTokenizer
 from transformers import AutoModel
 import torch
 import torch.nn as nn

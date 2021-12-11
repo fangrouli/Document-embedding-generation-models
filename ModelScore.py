@@ -1,6 +1,3 @@
-import os
-import pandas as pd
-import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.metrics import roc_curve, roc_auc_score
 import matplotlib.ticker as mticker

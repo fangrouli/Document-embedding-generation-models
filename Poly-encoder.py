@@ -3,17 +3,13 @@ from parameters import DEVICE, SBERT_VERSION, MAX_SENT_LENGTH, MAX_PARA_LENGTH
 from parameters import N_EPOCH, POLY_M, POLY_LR, EMB_SIZE, BATCH_SIZE
 from parameters import MENU, SAVE_HISTORY, SAVE_MODEL
 from ModelScore import ProduceAUC, plot_loss
-import os
-import pandas as pd
 import numpy as np
-import math
 from tqdm import tqdm
-from matplotlib import pyplot as plt
 from transformers import AutoModel
 import torch
-from torch import nn, Tensor
+from torch import nn
 import torch.nn.functional as F
-from torch.nn import TransformerEncoder, TransformerEncoderLayer
+
 result = [0, 0]
 
 def get_result(layer_name):
