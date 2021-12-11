@@ -52,11 +52,12 @@ The similarity score calculation we used is cosine similarity, and model evaluat
 
   
 ## **Step To Run Source Codes**
-1. Run DataPrep.py, enter the file directories of the original .tsv files of the train and test ultrabalanced PatentMatch dataset.
-2. Run TokGen.py, clearing of data and convert them to index tokens.
-3. Run ValidationSet.py, generate validation dataset from the training dataset.
-4. Run Baseline.py, evaluate the dataset and create the score.pt to keep logging model performance.
-5. Run any model from CNN.py, Transformer.py, Trans-poly-encoder.py and Poly-encoder.py according to need. (Note that Trans-poly-encoder.py requires a pretrained transformer model).
+1. Install all the required packages using the requirements.txt .  
+2. Run DataPrep.py, enter the file directories of the original .tsv files of the train and test ultrabalanced PatentMatch dataset.
+3. Run TokGen.py, clearing of data and convert them to index tokens.
+4. Run ValidationSet.py, generate validation dataset from the training dataset.
+5. Run Baseline.py, evaluate the dataset and create the score.pt to keep logging model performance.
+6. Run any model from CNN.py, Transformer.py, Trans-poly-encoder.py and Poly-encoder.py according to need. (Note that Trans-poly-encoder.py requires a pretrained transformer model).
   
 ### **Extra Files**
 parameters.py: Configuration files, as well as some universally used functions.  
