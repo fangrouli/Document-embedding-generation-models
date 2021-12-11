@@ -8,7 +8,8 @@ This is a repository for a project: Development and Application of Document Embe
 We utilised multiple sentence embedding generation techniques and the SBERT sentence encoder (https://www.sbert.net/) to generate document embeddings based on hierarchical doucment structure.
 
 The pipeline of this project:
-![image](https://user-images.githubusercontent.com/80878559/145664030-62a4eabe-e910-4852-b5e6-3ddb7602f4a8.png)
+  
+<img width='500' height='400' src="https://user-images.githubusercontent.com/80878559/145664030-62a4eabe-e910-4852-b5e6-3ddb7602f4a8.png" alt="1">
 
 ==============================================================================  
 The models that we developed:
@@ -16,25 +17,29 @@ The models that we developed:
 2. CNN (based on TextCNN by Kim, 2014)
   
 Data pipeline of CNN model:  
-![image](https://user-images.githubusercontent.com/80878559/145664051-b5a62b3b-4f68-432c-b737-00d9f1530a3a.png)  
+  
+<img width='900' height='300' src="https://user-images.githubusercontent.com/80878559/145664051-b5a62b3b-4f68-432c-b737-00d9f1530a3a.png" alt="2">
   
 Image for TextCNN architecture, from Kim, 2014:  
-<img width="389" alt="image" src="https://user-images.githubusercontent.com/80878559/145663994-dcb0f730-79a4-4dd8-8eb8-511b05bedd0a.png">  
+<img width='650' height='300' alt="image" src="https://user-images.githubusercontent.com/80878559/145663994-dcb0f730-79a4-4dd8-8eb8-511b05bedd0a.png">  
     
 3. Transformer (based on Transformer model by Vaswani *et al.*, 2017)
   
 Data pipeline of the transformer model:  
-![image](https://user-images.githubusercontent.com/80878559/145664070-39672d1f-65a6-44f4-a2fa-da52b7384828.png)  
+  
+<img width='550' height='300' src="https://user-images.githubusercontent.com/80878559/145664070-39672d1f-65a6-44f4-a2fa-da52b7384828.png" alt="3">
    
 4. Transformer-Poly-Encoder  
   
 Data pipeline of the Transformer-Poly-Encoder model:  
-![image](https://user-images.githubusercontent.com/80878559/145664084-4cebfd61-c833-402a-ba8d-4c9194cd1a14.png)  
+  
+<img width='500' height='300' src="https://user-images.githubusercontent.com/80878559/145664084-4cebfd61-c833-402a-ba8d-4c9194cd1a14.png" alt="4">
 
 5. Poly-Encoder (based on Poly-encoders by Humeau *et al.*, 2019)
 
 Data pipeline of the Poly-Encoder model:  
-![image](https://user-images.githubusercontent.com/80878559/145664111-933d8f3b-5be2-4684-a56f-c0c13c2df846.png)    
+    
+<img width='700' height='300' src="https://user-images.githubusercontent.com/80878559/145664111-933d8f3b-5be2-4684-a56f-c0c13c2df846.png" alt="4">
   
 ==============================================================================  
 The models are evaluated and trained on PatentMatch ultrabalanced datasets (by Risch *et al.*, 2020).
