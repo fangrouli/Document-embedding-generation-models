@@ -10,7 +10,7 @@ We utilised multiple sentence embedding generation techniques and the SBERT sent
 The pipeline of this project:
 ![image](https://user-images.githubusercontent.com/80878559/145664030-62a4eabe-e910-4852-b5e6-3ddb7602f4a8.png)
 
-=======================================================================================================================================================
+==============================================================================  
 The models that we developed:
 1. Baseline (Average Pool)
 2. CNN (based on TextCNN by Kim, 2014)
@@ -34,9 +34,9 @@ Data pipeline of the Transformer-Poly-Encoder model:
 5. Poly-Encoder (based on Poly-encoders by Humeau *et al.*, 2019)
 
 Data pipeline of the Poly-Encoder model:  
-![image](https://user-images.githubusercontent.com/80878559/145664111-933d8f3b-5be2-4684-a56f-c0c13c2df846.png)  
-
-=======================================================================================================================================================
+![image](https://user-images.githubusercontent.com/80878559/145664111-933d8f3b-5be2-4684-a56f-c0c13c2df846.png)    
+  
+==============================================================================  
 The models are evaluated and trained on PatentMatch ultrabalanced datasets (by Risch *et al.*, 2020).
 
 The training instance is a pair of documents (or paragraphs), _text_ and _text_b_. If the two is related (e.g. _text_ cited _text_b_), the label is 1, otherwise 0.
