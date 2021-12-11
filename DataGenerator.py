@@ -1,3 +1,9 @@
+'''
+Create the Dataset object serving as a customised data generator for producing mini-batches.
+Customized the generator and the collate function.
+Defined the padding function.
+'''
+
 from matplotlib import pyplot as plt
 import torch
 from parameters import TEST_PARAM, TRAIN_PARAM, VAL_PARAM
@@ -5,8 +11,12 @@ from parameters import TEST_PARAM, TRAIN_PARAM, VAL_PARAM
 plt.switch_backend('agg')
 
 class Dataset(torch.utils.data.Dataset):
-  #'Characterizes a dataset for PyTorch'
     def __init__(self, dataset_name):
+        '''
+		Defined the data generator object.
+		
+		@ dataset_name (string): different mode. 'train', 'test' or 'validation'.
+		'''
         if dataset_name == 'train':
             data_df = torch.load('train_tok.pt')
             label_df = torch.load('train_labels.pt')
@@ -33,6 +43,9 @@ class Dataset(torch.utils.data.Dataset):
         return ids, ids_b, lb, index
 
 def cust_collate(batch):
+	'''
+	Defines the shape of the mini-batches from the data generator
+	'''
     ids = [item[0] for item in batch]
     ids_b = [item[1] for item in batch]
 
@@ -43,6 +56,13 @@ def cust_collate(batch):
 
 
 def pad(ids, max_len, sent_len):
+	'''
+	The padding and truncation of the paragraphs, in order for them to have a universal shape for training models.
+	
+	@ ids (list): The input tokens of the paragraph
+	@ max_len (int): the fixed sentence length, defined in parameters.py 
+	@ sent_len (int): the fixed paragraph length, defined in parameters.py 
+	'''
     empty_ls = [1]*sent_len         #for pmb model, 1 represents empty
     batch = len(ids)
     for i in range(batch):
