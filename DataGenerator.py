@@ -58,6 +58,7 @@ def cust_collate(batch):
 def pad(ids, max_len, sent_len):
 	'''
 	The padding and truncation of the paragraphs, in order for them to have a universal shape for training models.
+	Returns sentence tokens of shape [batch_size, sent_len, max_len]
 	
 	@ ids (list): The input tokens of the paragraph
 	@ max_len (int): the fixed sentence length, defined in parameters.py 
