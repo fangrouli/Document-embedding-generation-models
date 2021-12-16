@@ -1,6 +1,6 @@
 '''
-Encoding of the paragraphs using the SBERT encoder.
-Cache the generated embeddings in respective .pt files.
+Tokenization of the paragraphs using the SBERT encoder.
+Cache the generated index tokens in respective .pt files.
 '''
 
 import pandas as pd
@@ -33,13 +33,13 @@ def read_write(old_df, new_df,
                idx,
                max_length):  
     '''
-    Tokenize and encode the data into embeddings.
-    Stores the embeddings in another dataframe.
+    Tokenize the data into indexn tokens.
+    Stores the tokens in another dataframe.
     
     @ old_df (dataframe): The dataframe that stores the original data.
-    @ new_df (dataframe): The dataframe that stores the encoded data.
-    @ generator (model): The pre-trained SBERT encoder.
-    @ idx (int): The index of the current instance that is embedded.
+    @ new_df (dataframe): The dataframe that stores the tokenized data.
+    @ generator (model): The pre-trained SBERT tokenizer.
+    @ idx (int): The index of the current instance that is tokenized.
     @ max_length (int): The MAX_SENT_LENGTH.
     '''
 
@@ -69,10 +69,10 @@ def read_write(old_df, new_df,
 
 def tokenize(df, path):
     '''
-    Started the encoding process, save the dataframe with embeddings in a .pt file for caching.
+    Started the tokenization process, save the dataframe with tokens in a .pt file for caching.
     
     @ df (dataframe): The dataframe that stores original data.
-    @ path (str): The path for the dataframe with embeddings to store.
+    @ path (str): The path for the dataframe with tokens to store.
     '''
     text_df = pd.DataFrame(np.nan,
                            index=range(len(df)),
