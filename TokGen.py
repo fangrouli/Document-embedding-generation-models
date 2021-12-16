@@ -1,3 +1,8 @@
+'''
+Encoding of the paragraphs using the SBERT encoder.
+Cache the generated embeddings in respective .pt files.
+'''
+
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
@@ -12,6 +17,12 @@ pd.options.mode.chained_assignment = None
 plt.switch_backend('agg')
 
 def save_labels(df, path):
+    '''
+    Cache the labels of the instances into a .pt file for training and testing.
+    
+    @ df (dataframe): The dataframe that stores the labels.
+    @ path (string): The directory to store the labels.
+    '''
     ls = []
     for i in range(len(df)):
         ls.append(df['label'][i])
@@ -21,6 +32,16 @@ def read_write(old_df, new_df,
                generator,
                idx,
                max_length):  
+    '''
+    Tokenize and encode the data into embeddings.
+    Stores the embeddings in another dataframe.
+    
+    @ old_df (dataframe): The dataframe that stores the original data.
+    @ new_df (dataframe): The dataframe that stores the encoded data.
+    @ generator (model): The pre-trained SBERT encoder.
+    @ idx (int): The index of the current instance that is embedded.
+    @ max_length (int): The MAX_SENT_LENGTH.
+    '''
 
     s_ls = nltk.sent_tokenize(old_df['text'][idx])
     s_b_ls = nltk.sent_tokenize(old_df['text_b'][idx])
@@ -47,6 +68,12 @@ def read_write(old_df, new_df,
 
 
 def tokenize(df, path):
+    '''
+    Started the encoding process, save the dataframe with embeddings in a .pt file for caching.
+    
+    @ df (dataframe): The dataframe that stores original data.
+    @ path (str): The path for the dataframe with embeddings to store.
+    '''
     text_df = pd.DataFrame(np.nan,
                            index=range(len(df)),
                            columns=['text', 'text_b'],
