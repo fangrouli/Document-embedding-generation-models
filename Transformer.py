@@ -1,3 +1,7 @@
+'''
+The construction of the transformer model and its training, evaluation methods.
+'''
+
 from DataGenerator import pad, generateData
 from parameters import DEVICE, SBERT_VERSION, MAX_SENT_LENGTH, MAX_PARA_LENGTH, N_HEAD, TRANS_DROPOUT, TRANS_LAYER, TRANS_LR
 from parameters import MENU, SAVE_HISTORY, SAVE_MODEL, TRANS_N_HIDDEN, EMB_SIZE, BATCH_SIZE, N_EPOCH
@@ -12,6 +16,15 @@ from torch.nn import TransformerEncoder, TransformerEncoderLayer
 
 class TransformerModel(nn.Module):
     def __init__(self, emb_size, max_n_sent, n_hidden, n_head, n_layers, dropout):
+        ''' Initailization of the transformer model.
+        
+        @ emb_size (int): Shape of the word embedding, EMB_SIZE.
+        @ max_n_sent (int): Number of sentences in the paragraph, MAX_PARA_LENGTH.
+        @ n_hidden (int): Number of hidden units (layer output channels) in Conv. layers, N_HIDDEN.
+        @ n_head (int): Number of heads of the multi-head attention layer.
+        @ n_layers (int): Number of sub-encoder layers in the transformer encoder.
+        @ dropout (float): The dropout ratio in the Positional Encoding object.
+        '''
         super().__init__()
         self.model_type = 'Transformer'
         self.emb_size = emb_size
@@ -21,31 +34,30 @@ class TransformerModel(nn.Module):
         self.transformer_encoder = TransformerEncoder(encoder_layers, n_layers)
         self.decoder = nn.CosineSimilarity(dim = 1)
         self.pooling = nn.MaxPool1d(kernel_size = max_n_sent)
-        #self.pooling = nn.AvgPool1d(kernel_size = max_n_sent)
 
     def forward(self, x1, x2) -> Tensor:
-        # x1, x2: Tensor, shape [batch_size, n_sentence, n_words, emb_size]
-        # output: similarity score
+        # x1, x2 (tensor): shape [batch_size, n_sentence, n_words, emb_size]
+        # output (tensor): similarity scores of the batch
 
-        mid1 = torch.mean(x1, 2)      #from (batch_size, n_sentence, n_words, emb_size) to (batch_size, n_sentence, emb_size)
+        mid1 = torch.mean(x1, 2)      # (batch_size, n_sentence, n_words, emb_size) --> (batch_size, n_sentence, emb_size)
         mid2 = torch.mean(x2, 2)
 
-        Mid1 = mid1.permute(1, 0, 2)    #from (batch_size, n_sentence, emb_size) to (n_sentence, batch_size, emb_size)
+        Mid1 = mid1.permute(1, 0, 2)    # (batch_size, n_sentence, emb_size) --> (n_sentence, batch_size, emb_size)
         Mid2 = mid2.permute(1, 0, 2)
 
         Mid1 = self.pos_encoder(Mid1)
         Mid2 = self.pos_encoder(Mid2)
 
-        output1 = self.transformer_encoder(Mid1)   #(n_sentence, batch_size, emb_size)
+        output1 = self.transformer_encoder(Mid1)   # (n_sentence, batch_size, emb_size)
         output2 = self.transformer_encoder(Mid2)
 
-        output1 = output1.permute(1, 2, 0)      #(batch_size, emb_size, n_sentence)
+        output1 = output1.permute(1, 2, 0)      # (batch_size, emb_size, n_sentence)
         output2 = output2.permute(1, 2, 0)
         
-        Out1 = self.pooling(output1) #(batch_size, emb_size, 1)
+        Out1 = self.pooling(output1) # (batch_size, emb_size, 1)
         Out2 = self.pooling(output2)
 
-        out1 = Out1.view(-1, Out1.size(1))  #(batch_size, emb_size)
+        out1 = Out1.view(-1, Out1.size(1))  # (batch_size, emb_size)
         out2 = Out2.view(-1, Out2.size(1))
 
         f_output = self.decoder(out1, out2)
@@ -54,6 +66,12 @@ class TransformerModel(nn.Module):
 
 class PositionalEncoding(nn.Module):
     def __init__(self, emb_size, max_n_sent, dropout):
+        ''' Initialization of the positional encoding used in the transformer.
+        
+        @ emb_size (int): Shape of the word embedding, EMB_SIZE.
+        @ max_n_sent (int): Number of sentences in the paragraph, MAX_PARA_LENGTH.
+        @ dropout (float): The dropout ratio in the Positional Encoding object.
+        '''
         super().__init__()
         self.dropout = nn.Dropout(p=dropout)
 
@@ -65,12 +83,24 @@ class PositionalEncoding(nn.Module):
         self.register_buffer('pe', pe)
 
     def forward(self, x):
-        # x: Tensor, shape [n_sentence, batch_size, emb_size]
+        # x (tensor): shape [n_sentence, batch_size, emb_size]
 
         x = x + self.pe[:x.size(0)]
         return self.dropout(x)
 
 def train(model, encoder, criterion, optimizer, train_generator, val_generator, history, model_dir, hist_dir, prev_ep_val_loss = 100):
+    ''' Training and validaiton of the model
+    
+    @ model (TransformerModel object): Initialized transformer model to be trained.
+    @ encoder (model): Pre-trained SBERT sentence encoder.
+    @ criterion (loss funtion): The loss function of the model.
+    @ optimizer (optimizer object): The optimizer of the model.
+    @ train_generator / val_generator (Dataset object): The mini-batch generator for more efficient training.
+    @ history (dictionary): For logging of the training performance, including training loss and validation loss.
+    @ model_dir (str): Directory for storing of the model checkpoints.
+    @ hist_dir (str): Directory for storing of the training history, in case of resumed training.
+    @ prev_ep_val_loss (float): In case of resumed training, for continuation of early-stopping.
+    '''
     num_epoch = N_EPOCH
     patience = 2
     earlystop_cnt = 0
@@ -146,6 +176,13 @@ def train(model, encoder, criterion, optimizer, train_generator, val_generator, 
                 break
 
 def eval(model, encoder, test_generator):
+    ''' Evaluation of the model
+    
+    @ model (TransformerModel object): Trained transformer model to be evaluated.
+    @ encoder (model): Pre-trained SBERT sentence encoder.
+    @ test_generator (Dataset object): The mini-batch generator for testing.
+    '''
+    
     score_df = torch.load('score.pt')
     record = input('Enter new record name:')
     score_df[record] = np.nan
@@ -186,12 +223,14 @@ if __name__ == "__main__":
     criterion = nn.BCELoss()
     optimizer = torch.optim.Adam(transformer.parameters(), lr = TRANS_LR)
 
-    if option == '1':    #new model
+    # Initialise a new model
+    if option == '1':    
         history = {'train loss':[], 'val loss':[]}
         train(transformer, encoder, criterion, optimizer, train_generator, val_generator, history, model_dir, hist_dir)
         plot_loss(history)
     
-    elif option == '2':   #continue paused training
+    # Resume paused training of an existing model
+    elif option == '2':   
         checkpoint = torch.load(model_dir)
         transformer.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
@@ -201,7 +240,8 @@ if __name__ == "__main__":
         train(transformer, encoder, criterion, optimizer, train_generator, val_generator, history, model_dir, hist_dir, val_loss)
         plot_loss(history)
     
-    else:    #evaluation
+    # Evaluation of a trained model
+    else:    
         checkpoint = torch.load(model_dir)
         transformer.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
