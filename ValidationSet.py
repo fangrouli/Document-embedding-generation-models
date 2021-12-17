@@ -1,3 +1,7 @@
+'''
+Generate a validation dataset from the training dataset, the ratio is train : val = 9 : 1.
+'''
+
 import pandas as pd
 from tqdm import tqdm
 from matplotlib import pyplot as plt
@@ -13,6 +17,8 @@ if __name__ == '__main__':
 
     print('.......Validation Set Generating........')
     X = range(len(train_df))
+    
+    # splitting of dataset
     X_train, X_val, y_train, y_val = train_test_split(X, labels, test_size = 0.1, random_state = 42)
 
     train_text_df = pd.DataFrame(index = range(len(X_train)), columns = ['text', 'text_b'], dtype = object)
