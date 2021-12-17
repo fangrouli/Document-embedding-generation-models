@@ -22,6 +22,7 @@ from torch.nn import TransformerEncoder, TransformerEncoderLayer
 para_embs = {}
 result = [0, 0]
 
+#Reference: https://github.com/chijames/Poly-Encoder/blob/master/encoder.py
 class PolyEncoder(nn.Module):
     def __init__(self, poly_m, emb_size):
         ''' Initilisation of the poly-encoder model
