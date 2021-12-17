@@ -1,3 +1,7 @@
+'''
+Defines the poly-encoder model, and its training, evaluation methods.
+'''
+
 from DataGenerator import pad, generateData
 from parameters import DEVICE, SBERT_VERSION, MAX_SENT_LENGTH, MAX_PARA_LENGTH
 from parameters import N_EPOCH, POLY_M, POLY_LR, EMB_SIZE, BATCH_SIZE
@@ -10,9 +14,13 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 
+# Define a global cache space to store the similarity result of poly-encoder, as the model output is the loss instead of similarity.
 result = [0, 0]
 
 def get_result(layer_name):
+    ''' The hook method used in poly-encoder model to extract the generated similarity score from the specified layer.
+    @ layer_name (str): The layer name that output similarity score.
+    '''
     def hook1(model, input, output):
         global result
         t = torch.clamp(output, 0, 1).detach().cpu().numpy()
@@ -23,8 +31,13 @@ def get_result(layer_name):
 #Reference: https://github.com/chijames/Poly-Encoder/blob/master/encoder.py
 class PolyEncoder(nn.Module):
     def __init__(self, poly_m, emb_size, max_n_sent):
+        ''' Initilisation of the poly-encoder model
+        
+        @ poly_m (int): The shape of the vectors in poly_m matrix used in the model, POLY_M.
+        @ emb_size (int): Shape of the word embedding, EMB_SIZE.
+        @ max_n_sent (int): Number of sentences in the paragraph, MAX_PARA_LENGTH.
+        '''
         super().__init__()
-        #self.bert = kwargs['bert']
         self.poly_m = poly_m
         self.emb_size = emb_size
         self.max_n_sent = max_n_sent
@@ -33,19 +46,19 @@ class PolyEncoder(nn.Module):
         self.decoder = nn.CosineSimilarity(dim = 1)
 
     def dot_attention(self, q, k, v):
-        # para_emb: [bs, max_n_sent, dim]
-        # query: [bs, max_n_sent, dim] or [bs, poly_m, dim]
-        # q: [bs, max_n_sent, dim] or [bs, poly_m, dim]
-        # k = v: [bs, max_n_sent, dim]
-
+        ''' The dot attention layer used in poly-encoder.
+        
+        @ q (tensor): [bs, poly_m, dim] or [bs, res_cnt, dim].
+        @ k = v (tensor): [bs, length, dim] or [bs, poly_m, dim].
+        '''
         attn_weights = torch.matmul(q, k.transpose(2, 1)) # [bs, poly_m, length]
         attn_weights = F.softmax(attn_weights, -1)
         output = torch.matmul(attn_weights, v) # [bs, poly_m, dim]
         return output
 
-    def forward(self, emb, emb_b, labels=None): #[bs, n_sent, n_word, dim]
+    def forward(self, emb, emb_b, labels=None):
         emb = torch.mean(emb, 2)
-        emb_b = torch.mean(emb_b, 2) #[bs, n_sent, dim]
+        emb_b = torch.mean(emb_b, 2) # (batch_size, n_sentence, n_words, emb_size) --> (batch_size, n_sentence, emb_size)
 
         batch_size = emb.shape[0]
         dim = self.emb_size
@@ -58,7 +71,7 @@ class PolyEncoder(nn.Module):
         # context encoder
         cont_embs = self.dot_attention(poly_codes, emb, emb) # [bs, poly_m, dim]
 
-        # merge
+        # merge (global interaction)
         if batch_size == 1:
             ctx_emb = self.dot_attention(emb_b, cont_embs, cont_embs) # [bs, length, dim]
         else:
@@ -77,6 +90,17 @@ class PolyEncoder(nn.Module):
             return loss
 
 def train(model, encoder, optimizer, train_generator, val_generator, history, model_dir, hist_dir, prev_ep_val_loss = 100):
+    ''' Training and validaiton of the model
+    
+    @ model (PolyEncoder object): Initialized poly-encoder model to be trained.
+    @ encoder (model): Pre-trained SBERT sentence encoder.
+    @ optimizer (optimizer object): The optimizer of the model.
+    @ train_generator / val_generator (Dataset object): The mini-batch generator for more efficient training.
+    @ history (dictionary): For logging of the training performance, including training loss and validation loss.
+    @ model_dir (str): Directory for storing of the model checkpoints.
+    @ hist_dir (str): Directory for storing of the training history, in case of resumed training.
+    @ prev_ep_val_loss (float): In case of resumed training, for continuation of early-stopping.
+    '''
     num_epoch = N_EPOCH
     patience = 2
     earlystop_cnt = 0
@@ -106,7 +130,6 @@ def train(model, encoder, optimizer, train_generator, val_generator, history, mo
             train_epoch_loss += y_true.shape[0] * train_loss.item()
             instance_cnt += len(id)
 
-        #if (epoch+1) % 5 == 0:
         train_epoch_loss /= instance_cnt
         history['train loss'].append(train_epoch_loss)
 
@@ -149,6 +172,12 @@ def train(model, encoder, optimizer, train_generator, val_generator, history, mo
                 break
 
 def eval(model, encoder, test_generator):
+    ''' Evaluation of the model
+    
+    @ model (PolyEncoder object): Trained poly-encoder model to be evaluation.
+    @ encoder (model): Pre-trained SBERT sentence encoder.
+    @ test_generator (Dataset object): The mini-batch generator for testing.
+    '''
     global result
     score_df = torch.load('score.pt')
     record = input('Enter new record name:')
@@ -185,13 +214,15 @@ if __name__ == "__main__":
     optimizer = torch.optim.Adam(poly_encoder.parameters(), lr = POLY_LR)
     poly_encoder.decoder.register_forward_hook(get_result('decoder'))
 
-    if option == '1':    #new model
+    # Train the initialized new model form start
+    if option == '1':
         history = {'train loss':[], 'val loss':[]}
         train(poly_encoder, encoder, optimizer, 
               train_generator, val_generator, history, model_dir, hist_dir)
         plot_loss(history)
     
-    elif option == '2':   #continue paused training
+    # Load and resume paused training of an existing model
+    elif option == '2':
         checkpoint = torch.load(model_dir)
         poly_encoder.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
@@ -202,7 +233,8 @@ if __name__ == "__main__":
               val_generator, history, model_dir, hist_dir, val_loss)
         plot_loss(history)
     
-    else:    #evaluation
+    # Load and evaluation of a trained model
+    else:
         checkpoint = torch.load(model_dir)
         poly_encoder.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
