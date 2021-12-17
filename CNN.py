@@ -44,10 +44,10 @@ class CNNModel(nn.Module):
         for h in self.window_sizes])
 
     def forward(self, x1, x2):
-        mid1 = torch.mean(x1, 2)      # from (batch_size, n_sentence, n_words, emb_size) to (batch_size, n_sentence, emb_size)
-        mid2 = torch.mean(x2, 2)      # average accross words(from word to sent)
+        mid1 = torch.mean(x1, 2)      # (batch_size, n_sentence, n_words, emb_size) --> (batch_size, n_sentence, emb_size)
+        mid2 = torch.mean(x2, 2)
         
-        Mid1 = mid1.permute(0, 2, 1)    #from (batch_size, n_sentence, emb_size) to (batch_size, emb_size, n_sentence)   
+        Mid1 = mid1.permute(0, 2, 1)    # (batch_size, n_sentence, emb_size) --> (batch_size, emb_size, n_sentence)   
         Mid2 = mid2.permute(0, 2, 1)
         
         layer1 = [conv(Mid1) for conv in self.convs]  #(batch_size, n_hidden, 1) * len(self.window_sizes)
