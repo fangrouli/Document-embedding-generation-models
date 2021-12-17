@@ -154,9 +154,9 @@ def train(model, encoder, criterion, optimizer, train_generator, val_generator, 
 def eval(model, encoder, test_generator):
     ''' Evaluation of the model
     
-    @ model (CNNModel object): Initialized CNN model to be trained.
+    @ model (CNNModel object): Trained CNN model to be evaluated.
     @ encoder (model): Pre-trained SBERT sentence encoder.
-    @ test_generator (Dataset object): The mini-batch generator for more efficient training.
+    @ test_generator (Dataset object): The mini-batch generator for testing.
     '''
     
     score_df = torch.load('score.pt')
