@@ -152,7 +152,7 @@ def train(model, encoder, criterion, optimizer, train_generator, val_generator, 
                 break
 
 def eval(model, encoder, test_generator):
-    ''' Training of the model
+    ''' Evaluation of the model
     
     @ model (CNNModel object): Initialized CNN model to be trained.
     @ encoder (model): Pre-trained SBERT sentence encoder.
