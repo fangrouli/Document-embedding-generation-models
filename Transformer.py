@@ -20,10 +20,10 @@ class TransformerModel(nn.Module):
         
         @ emb_size (int): Shape of the word embedding, EMB_SIZE.
         @ max_n_sent (int): Number of sentences in the paragraph, MAX_PARA_LENGTH.
-        @ n_hidden (int): Number of hidden units (layer output channels) in Conv. layers, N_HIDDEN.
-        @ n_head (int): Number of heads of the multi-head attention layer.
-        @ n_layers (int): Number of sub-encoder layers in the transformer encoder.
-        @ dropout (float): The dropout ratio in the Positional Encoding object.
+        @ n_hidden (int): Number of hidden units (layer output channels) in Conv. layers, TRANS_N_HIDDEN.
+        @ n_head (int): Number of heads of the multi-head attention layer, N_HEAD.
+        @ n_layers (int): Number of sub-encoder layers in the transformer encoder, TRANS_LAYER.
+        @ dropout (float): The dropout ratio in the Positional Encoding object, TRANS_DROPOUT.
         '''
         super().__init__()
         self.model_type = 'Transformer'
@@ -70,7 +70,7 @@ class PositionalEncoding(nn.Module):
         
         @ emb_size (int): Shape of the word embedding, EMB_SIZE.
         @ max_n_sent (int): Number of sentences in the paragraph, MAX_PARA_LENGTH.
-        @ dropout (float): The dropout ratio in the Positional Encoding object.
+        @ dropout (float): The dropout ratio in the Positional Encoding object, TRANS_DROPOUT.
         '''
         super().__init__()
         self.dropout = nn.Dropout(p=dropout)
